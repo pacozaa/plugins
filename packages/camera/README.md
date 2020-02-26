@@ -53,7 +53,13 @@ import 'package:camera/camera.dart';
 List<CameraDescription> cameras;
 
 Future<void> main() async {
-  cameras = await availableCameras();
+  // Fetch the available cameras before initializing the app.
+  try {
+    WidgetsFlutterBinding.ensureInitialized();
+    cameras = await availableCameras();
+  } on CameraException catch (e) {
+    logError(e.code, e.description);
+  }
   runApp(CameraApp());
 }
 
